@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生サポートトップページ</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .block {
+            width: 300px;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+        }
+        .block:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .block h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #d7e0e9;
+        }
+        .block p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #eee3e3;
+        }
+        .block .keyword {
+            font-weight: bold;
+            color: #e4e73c;
+            margin-top: 10px;
+        }
+        .adhd { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        .asd { background: linear-gradient(135deg, #e67e22, #d35400); color: white; }
+        .ld { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+        .self-esteem { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; }
+        .mental-health { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .hikikomori { background: linear-gradient(135deg, #34495e, #2c3e50); color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ADHDブロック -->
+        <div class="block adhd" onclick="location.href='adhd.html'">
+            <h2>ADHD</h2>
+            <p>集中力が続かない、忘れっぽい、じっとしているのが苦手…そんなことありませんか？</p>
+            <div class="keyword">こんなことある？</div>
+        </div>
+
+        <!-- ASDブロック -->
+        <div class="block asd" onclick="location.href='asd.html'">
+            <h2>ASD</h2>
+            <p>コミュニケーションが苦手、こだわりが強い、感覚過敏…そんなことありませんか？</p>
+            <div class="keyword">こんなことある？</div>
+        </div>
+
+        <!-- LDブロック -->
+        <div class="block ld" onclick="location.href='LD学生.html'">
+            <h2>LD</h2>
+            <p>読み書きや計算が苦手、時間管理が難しい…そんなことありませんか？</p>
+            <div class="keyword">こんなことある？</div>
+        </div>
+
+        <!-- 自己肯定感の低い学生ブロック -->
+        <div class="block self-esteem" onclick="location.href='自己肯定感.html'">
+            <h2>自己肯定感の低い学生</h2>
+            <p>自分に自信が持てない、失敗を恐れる…そんなことありませんか？</p>
+            <div class="keyword">こんなことある？</div>
+        </div>
+
+        <!-- メンタルヘルスに課題を抱える学生ブロック -->
+        <div class="block mental-health" onclick="location.href='メンタルサポート.html'">
+            <h2>メンタルヘルスに課題を抱える学生</h2>
+            <p>不安やストレスが強い、気分の波が激しい…そんなことありませんか？</p>
+            <div class="keyword">こんなことある？</div>
+        </div>
+
+        <!-- ひきこもりがちな学生ブロック -->
+        <div class="block hikikomori" onclick="location.href='ひきこもりがち.html'">
+            <h2>ひきこもりがちな学生</h2>
+            <p>外に出るのが億劫、人と会うのが苦手…そんなことありませんか？</p>
+            <div class="keyword">こんなことある？</div>
+        </div>
+    </div>
+
+    <script>
+        // ブロックのホバーエフェクトを強化
+        const blocks = document.querySelectorAll('.block');
+        blocks.forEach(block => {
+            block.addEventListener('mouseenter', () => {
+                block.style.transform = 'translateY(-10px)';
+                block.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+            });
+            block.addEventListener('mouseleave', () => {
+                block.style.transform = 'translateY(0)';
+                block.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+            });
+        });
+    </script>
+</body>
+</html>

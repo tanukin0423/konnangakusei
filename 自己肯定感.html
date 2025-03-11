@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自己肯定感サポートサイト</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .slider-container p {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .slider-container input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+            accent-color: #3498db;
+        }
+        .slider-container span {
+            width: 20px;
+            text-align: center;
+        }
+        .chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .advice-content, .guide-content {
+            line-height: 1.8;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section h2 {
+            color: #e67e22;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .section ul li {
+            margin: 10px 0;
+        }
+        .result-container {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>自己肯定感サポートサイト</h1>
+
+    <!-- 診断ツール -->
+    <div class="section">
+        <h2>自己肯定感診断</h2>
+        <div id="questions" class="question-container"></div>
+        <div class="button-container">
+            <button onclick="calculateResults()">診断する</button>
+        </div>
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div id="result" class="result-container"></div>
+    </div>
+
+    <!-- アドバイスとリソース -->
+    <div class="section">
+        <h2>アドバイスとリソース</h2>
+        <div class="advice-content">
+            <h3>自己肯定感を高めるためのアドバイス</h3>
+            <ul>
+                <li><strong>小さな目標を設定する</strong>: 達成可能な小さな目標を設定し、達成感を積み重ねましょう。例えば、毎日1つ新しいことを学ぶなど。</li>
+                <li><strong>成功体験を記録する</strong>: 日記やノートに成功体験を記録し、定期的に振り返りましょう。これにより、自分の成長を実感できます。</li>
+                <li><strong>ポジティブなフィードバック</strong>: 自分自身に対してポジティブな言葉をかける習慣をつけましょう。例えば、「よくやった！」「自分はできる！」など。</li>
+                <li><strong>リフレーミング</strong>: ネガティブな思考をポジティブな視点に変換する練習を行いましょう。例えば、「失敗した」ではなく「学びの機会を得た」と考える。</li>
+                <li><strong>自己受容</strong>: 自分の欠点を受け入れ、長所を認識しましょう。完璧である必要はありません。</li>
+                <li><strong>感謝の気持ちを持つ</strong>: 毎日、感謝できることを3つ書き出しましょう。これにより、ポジティブな思考が習慣化されます。</li>
+                <li><strong>セルフケア</strong>: 十分な睡眠、バランスの取れた食事、適度な運動を心がけましょう。体の健康は心の健康にも繋がります。</li>
+                <li><strong>他人との比較を避ける</strong>: 他人と比較するのではなく、自分の成長に焦点を当てましょう。</li>
+                <li><strong>専門家の助けを借りる</strong>: 自己肯定感が低いと感じる場合は、カウンセラーや心理士に相談することも検討しましょう。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 専門家向けリソース -->
+    <div class="section">
+        <h2>専門家向けリソース</h2>
+        <div class="guide-content">
+            <h3>カウンセラーや教師向けの応酬話法例</h3>
+            <ul>
+                <li><strong>傾聴と共感</strong>: 学生の話をしっかりと聞き、共感を示しましょう。例えば、「それは大変でしたね」と共感の言葉をかける。</li>
+                <li><strong>オープンクエスチョン</strong>: 学生が自分で考えるきっかけを与えるために、オープンクエスチョンを投げかけましょう。例えば、「その時、どんな気持ちでしたか？」</li>
+                <li><strong>リフレーミング</strong>: 学生のネガティブな思考をポジティブな視点に変換する手助けをしましょう。例えば、「失敗した」を「学びの機会を得た」とリフレーミングする。</li>
+                <li><strong>目標設定の支援</strong>: 学生と一緒に小さな目標を設定し、達成感を積み重ねる手助けをしましょう。例えば、「今週の目標を1つ決めてみましょう」と提案する。</li>
+                <li><strong>ポジティブなフィードバック</strong>: 学生の良いところを具体的に褒めましょう。例えば、「あなたの努力は素晴らしいです」と具体的に褒める。</li>
+                <li><strong>ストレスマネジメント</strong>: 学生がストレスを感じたときに、リラックスする方法を教えましょう。例えば、深呼吸やマインドフルネスを紹介する。</li>
+                <li><strong>専門家との連携</strong>: 必要に応じて、精神科医や臨床心理士を紹介しましょう。専門家との連携が重要です。</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "自分の得意なことや好きなことをいくつか挙げられますか？",
+            "失敗しても、次はもっとうまくやれると思えますか？",
+            "他人と比べずに、自分の成長を実感できますか？",
+            "新しいことに挑戦するとき、ワクワクしますか？",
+            "自分に自信を持てる瞬間はありますか？",
+            "周りの意見に流されず、自分の考えを貫けますか？",
+            "何かを達成したとき、自分を褒められますか？",
+            "自分の価値は、他人の評価に左右されないと思いますか？",
+            "自分の人生に満足していますか？",
+            "自分の決断に自信を持てますか？",
+            "自分に対して否定的な考えを持ちやすいですか？",
+            "他人から褒められたとき、素直に受け入れられますか？",
+            "自分の欠点を受け入れることができますか？",
+            "自分の長所を他人に伝えることができますか？",
+            "自分が大切にしている価値観は何ですか？",
+            "自分がやりたいことを明確に言えますか？",
+            "自分が成し遂げたことを誇りに思えますか？",
+            "自分が失敗したとき、自分を責めずに次に活かせますか？",
+            "自分が他人に与える影響を意識していますか？",
+            "自分が他人から必要とされていると感じますか？"
+        ];
+
+        let currentScores = {};
+
+        function loadQuestions() {
+            const container = document.getElementById("questions");
+            questions.forEach((q, index) => {
+                container.innerHTML += `
+                    <div class="slider-container">
+                        <p>${q}</p>
+                        <input type="range" min="0" max="5" value="3" 
+                               oninput="this.nextElementSibling.textContent = this.value">
+                        <span>3</span>
+                    </div>`;
+            });
+        }
+
+        function calculateResults() {
+            let totalScore = 0;
+            document.querySelectorAll("#questions input[type='range']").forEach(input => {
+                totalScore += parseInt(input.value);
+            });
+
+            const averageScore = (totalScore / (questions.length * 5)) * 100;
+            currentScores = { "自己肯定感": averageScore };
+            showRadarChart(currentScores);
+            showResult(averageScore);
+        }
+
+        function showRadarChart(scores) {
+            const ctx = document.getElementById("radarChart").getContext("2d");
+            const chartData = {
+                labels: Object.keys(scores),
+                datasets: [{
+                    label: '診断結果',
+                    data: Object.values(scores),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            };
+
+            const chartOptions = {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        stepSize: 20,
+                        callback: function (value) { return value + "%" }
+                    },
+                    pointLabels: {
+                        fontSize: 12
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            };
+
+            if (window.myRadarChart) {
+                window.myRadarChart.destroy();
+            }
+
+            window.myRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: chartData,
+                options: chartOptions
+            });
+        }
+
+        function showResult(score) {
+            const resultContainer = document.getElementById("result");
+            let resultText = "";
+            if (score >= 80) {
+                resultText = `<h3>結果: 自己肯定感が高い</h3>
+                               <p>あなたは自己肯定感が高いようです。この調子で自分を信じて、新しいことに挑戦していきましょう。</p>`;
+            } else if (score >= 50) {
+                resultText = `<h3>結果: 自己肯定感が中程度</h3>
+                               <p>あなたの自己肯定感は中程度です。少しずつ自己肯定感を高めるために、小さな目標を設定し、達成感を積み重ねていきましょう。</p>`;
+            } else {
+                resultText = `<h3>結果: 自己肯定感が低い</h3>
+                               <p>あなたの自己肯定感は低いようです。まずは自分を責めずに、小さな成功体験を積み重ねることが大切です。専門家の助けを借りることも検討しましょう。</p>`;
+            }
+            resultContainer.innerHTML = resultText;
+        }
+
+        loadQuestions();
+    </script>
+</body>
+</html>

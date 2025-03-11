@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>引きこもりがちな学生サポートサイト</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .slider-container p {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .slider-container input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+            accent-color: #3498db;
+        }
+        .slider-container span {
+            width: 20px;
+            text-align: center;
+        }
+        .chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .assessment-result {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .advice-content, .guide-content {
+            line-height: 1.8;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section h2 {
+            color: #e67e22;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .section ul li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>引きこもりがちな学生サポートサイト</h1>
+
+    <div class="section">
+        <h2>引きこもり傾向診断</h2>
+        <div class="question-container" id="question-container">
+            <!-- 質問とスライダーはJavaScriptで動的に生成 -->
+        </div>
+        <button onclick="calculateResults()">診断する</button>
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div class="assessment-result" id="assessment-result">
+            <!-- アセスメント結果はJavaScriptで動的に生成 -->
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>アドバイスとリソース</h2>
+        <div class="advice-content">
+            <h3>引きこもりがちな学生向けのアドバイス</h3>
+            <ul>
+                <li><strong>小さな目標を設定する</strong>: 達成可能な小さな目標を設定し、達成感を積み重ねましょう。例えば、毎日10分外を散歩するなど。</li>
+                <li><strong>ルーティンの確立</strong>: 毎日のルーティンを確立し、予測可能な環境を作りましょう。スケジュール帳やアプリを使って、予定を可視化するのも良い方法です。</li>
+                <li><strong>ストレスマネジメント</strong>: ストレスを感じたときは、深呼吸やマインドフルネスを行いましょう。また、リラックスできる趣味を見つけることも大切です。</li>
+                <li><strong>専門家の助けを借りる</strong>: 引きこもりがちな状態が続く場合は、カウンセラーや心理士に相談しましょう。</li>
+                <li><strong>ソーシャルサポート</strong>: 友人や家族と話し、孤立感を軽減しましょう。オンラインでの交流も有効です。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>専門家向けリソース</h2>
+        <div class="guide-content">
+            <h3>カウンセラーや教師向けのガイドライン</h3>
+            <ul>
+                <li><strong>小さな目標設定の支援</strong>: 学生と一緒に小さな目標を設定し、達成感を積み重ねる。</li>
+                <li><strong>ルーティンの提供</strong>: 予測可能なスケジュールを提供し、学生が安心できる環境を作る。</li>
+                <li><strong>ストレスマネジメントの指導</strong>: 学生がストレスを感じたときに、リラックスする方法を教える。</li>
+                <li><strong>専門家との連携</strong>: 必要に応じて、精神科医や臨床心理士を紹介する。</li>
+                <li><strong>ポジティブなフィードバック</strong>: 学生の良いところを具体的に褒める。</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 質問リスト
+        const questions = [
+            "外に出るのが億劫だと感じますか？",
+            "人と会うのが面倒だと感じますか？",
+            "一日のほとんどを自分の部屋で過ごしていますか？",
+            "夜更かしをして、昼夜逆転の生活をしていますか？",
+            "以前楽しんでいた活動や趣味への興味が失われましたか？",
+            "友人や知人からの連絡に返信するのを避けていますか？",
+            "他人の目を気にして外出を控えていますか？",
+            "新しい人間関係を築くことに不安を感じますか？",
+            "学校や仕事、サークルなどの活動に参加することが少ないですか？",
+            "外出時に強い不安や緊張を感じますか？",
+            "自分に自信が持てないと感じますか？",
+            "将来に対して希望が持てないと感じますか？",
+            "自分が他人に迷惑をかけていると感じることが多いですか？",
+            "他人からの評価が気になりすぎると感じますか？",
+            "自分が無価値だと感じることがありますか？"
+        ];
+
+        // スライダーの値を保持する配列
+        let values = new Array(questions.length).fill(3);
+
+        // 質問とスライダーを動的に生成
+        const questionContainer = document.getElementById('question-container');
+        questions.forEach((question, index) => {
+            const sliderContainer = document.createElement('div');
+            sliderContainer.className = 'slider-container';
+
+            const questionText = document.createElement('p');
+            questionText.textContent = question;
+
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.min = '0';
+            slider.max = '5';
+            slider.value = values[index];
+            slider.addEventListener('input', (e) => {
+                values[index] = parseInt(e.target.value, 10);
+                e.target.nextElementSibling.textContent = values[index];
+            });
+
+            const valueDisplay = document.createElement('span');
+            valueDisplay.textContent = values[index];
+
+            sliderContainer.appendChild(questionText);
+            sliderContainer.appendChild(slider);
+            sliderContainer.appendChild(valueDisplay);
+            questionContainer.appendChild(sliderContainer);
+        });
+
+        // レーダーチャートの初期化
+        let radarChart;
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ["引きこもり傾向"],
+                datasets: [{
+                    label: "診断結果",
+                    data: [0],
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 2,
+                }],
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                    },
+                },
+            },
+        });
+
+        // アセスメント結果を表示する関数
+        function displayAssessmentResult(averageScore) {
+            const assessmentResult = document.getElementById('assessment-result');
+            let resultText = '';
+
+            if (averageScore < 30) {
+                resultText = `
+                    <h3>診断結果: 低い引きこもり傾向</h3>
+                    <p>
+                        あなたの引きこもり傾向は低いようです。これは、あなたが柔軟に対応できることを示しています。
+                        ただし、特定の状況で困難を感じることがある場合は、サポートを求めることも大切です。
+                    </p>
+                `;
+            } else if (averageScore < 70) {
+                resultText = `
+                    <h3>診断結果: 中程度の引きこもり傾向</h3>
+                    <p>
+                        あなたの引きこもり傾向は中程度です。特定の状況で困難を感じることがあるかもしれませんが、
+                        それはあなたがユニークな個性を持っている証拠です。自分に合った環境やサポートを見つけることで、
+                        より快適に過ごすことができるでしょう。
+                    </p>
+                `;
+            } else {
+                resultText = `
+                    <h3>診断結果: 高い引きこもり傾向</h3>
+                    <p>
+                        あなたの引きこもり傾向は高いようです。これは、あなたが特定の状況で困難を感じることがあることを示しています。
+                        しかし、それはあなたが特別な才能や興味を持っている可能性も意味します。専門家のサポートや
+                        自分に合った環境を整えることで、より快適に過ごすことができるでしょう。
+                    </p>
+                `;
+            }
+
+            assessmentResult.innerHTML = resultText;
+        }
+
+        // 診断結果を計算してレーダーチャートを更新
+        function calculateResults() {
+            const totalScore = values.reduce((sum, value) => sum + value, 0);
+            const averageScore = (totalScore / (questions.length * 5)) * 100;
+
+            // レーダーチャートのデータを更新
+            radarChart.data.datasets[0].data = [averageScore];
+            radarChart.update();
+
+            // アセスメント結果を表示
+            displayAssessmentResult(averageScore);
+        }
+
+        // 初期レーダーチャートを表示
+        calculateResults();
+    </script>
+</body>
+</html>

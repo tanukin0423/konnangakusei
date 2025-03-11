@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LD学生サポートサイト</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .slider-container p {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .slider-container input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+            accent-color: #3498db;
+        }
+        .slider-container span {
+            width: 20px;
+            text-align: center;
+        }
+        .chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .assessment-result {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .advice-content, .guide-content {
+            line-height: 1.8;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section h2 {
+            color: #e67e22;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .section ul li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>LD学生サポートサイト</h1>
+
+    <div class="section">
+        <h2>LD特性診断</h2>
+        <div class="question-container" id="question-container">
+            <!-- 質問とスライダーはJavaScriptで動的に生成 -->
+        </div>
+        <button onclick="calculateResults()">診断する</button>
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div class="assessment-result" id="assessment-result">
+            <!-- アセスメント結果はJavaScriptで動的に生成 -->
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>アドバイスとリソース</h2>
+        <div class="advice-content">
+            <h3>LD学生向けのアドバイス</h3>
+            <ul>
+                <li><strong>個別の学習計画</strong>: 学生の学習スタイルに合わせた計画を作成し、達成感を積み重ねましょう。</li>
+                <li><strong>マルチモーダル学習</strong>: 視覚、聴覚、運動感覚を活用した学習方法を取り入れましょう。</li>
+                <li><strong>支援ツールの活用</strong>: 読み上げソフトや音声入力ツールを活用し、学習をサポートしましょう。</li>
+                <li><strong>反復練習</strong>: 苦手な部分を繰り返し練習し、定着を図りましょう。</li>
+                <li><strong>専門家の助けを借りる</strong>: 必要に応じて、カウンセラーや心理士に相談しましょう。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>専門家向けリソース</h2>
+        <div class="guide-content">
+            <h3>カウンセラーや教師向けのガイドライン</h3>
+            <ul>
+                <li><strong>個別の学習計画の作成</strong>: 学生の学習スタイルに合わせた計画を作成し、達成感を積み重ねる。</li>
+                <li><strong>マルチモーダル学習の導入</strong>: 視覚、聴覚、運動感覚を活用した学習方法を取り入れる。</li>
+                <li><strong>支援ツールの活用</strong>: 読み上げソフトや音声入力ツールを活用し、学習をサポートする。</li>
+                <li><strong>反復練習の指導</strong>: 苦手な部分を繰り返し練習し、定着を図る。</li>
+                <li><strong>専門家との連携</strong>: 必要に応じて、精神科医や臨床心理士を紹介する。</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 質問リスト
+        const questions = [
+            "本や文章を読むのに、時間がかかると感じますか？",
+            "似ている文字を見分けるのに苦労しますか？",
+            "文章の内容を理解するのに時間がかかりますか？",
+            "計算をする時、よく間違えたり混乱したりしますか？",
+            "物事の順番を覚えるのは難しいですか？",
+            "アナログ時計を見て、時間を素早く読み取るのは苦手ですか？",
+            "左右を即座に判断するのは難しいですか？",
+            "図形や地図を見て理解するのは苦手ですか？",
+            "単語のスペルを正確に覚えるのは難しいですか？",
+            "複数の指示を聞いて、順番通りに実行するのは苦手ですか？",
+            "新しい環境に適応するのに時間がかかりますか？",
+            "他人とのコミュニケーションが苦手だと感じますか？",
+            "特定のことに強い興味やこだわりがありますか？",
+            "急な予定変更があると、対応するのが難しいですか？",
+            "他人の表情や態度から気持ちを読み取るのは苦手ですか？"
+        ];
+
+        // スライダーの値を保持する配列
+        let values = new Array(questions.length).fill(3);
+
+        // 質問とスライダーを動的に生成
+        const questionContainer = document.getElementById('question-container');
+        questions.forEach((question, index) => {
+            const sliderContainer = document.createElement('div');
+            sliderContainer.className = 'slider-container';
+
+            const questionText = document.createElement('p');
+            questionText.textContent = question;
+
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.min = '0';
+            slider.max = '5';
+            slider.value = values[index];
+            slider.addEventListener('input', (e) => {
+                values[index] = parseInt(e.target.value, 10);
+                e.target.nextElementSibling.textContent = values[index];
+            });
+
+            const valueDisplay = document.createElement('span');
+            valueDisplay.textContent = values[index];
+
+            sliderContainer.appendChild(questionText);
+            sliderContainer.appendChild(slider);
+            sliderContainer.appendChild(valueDisplay);
+            questionContainer.appendChild(sliderContainer);
+        });
+
+        // レーダーチャートの初期化
+        let radarChart;
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ["LD特性"],
+                datasets: [{
+                    label: "診断結果",
+                    data: [0],
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 2,
+                }],
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                    },
+                },
+            },
+        });
+
+        // アセスメント結果を表示する関数
+        function displayAssessmentResult(averageScore) {
+            const assessmentResult = document.getElementById('assessment-result');
+            let resultText = '';
+
+            if (averageScore < 30) {
+                resultText = `
+                    <h3>診断結果: 低い特性</h3>
+                    <p>
+                        あなたのLD特性は低いようです。これは、あなたが柔軟に対応できることを示しています。
+                        ただし、特定の状況で困難を感じることがある場合は、サポートを求めることも大切です。
+                    </p>
+                `;
+            } else if (averageScore < 70) {
+                resultText = `
+                    <h3>診断結果: 中程度の特性</h3>
+                    <p>
+                        あなたのLD特性は中程度です。特定の状況で困難を感じることがあるかもしれませんが、
+                        それはあなたがユニークな個性を持っている証拠です。自分に合った環境やサポートを見つけることで、
+                        より快適に過ごすことができるでしょう。
+                    </p>
+                `;
+            } else {
+                resultText = `
+                    <h3>診断結果: 高い特性</h3>
+                    <p>
+                        あなたのLD特性は高いようです。これは、あなたが特定の状況で困難を感じることがあることを示しています。
+                        しかし、それはあなたが特別な才能や興味を持っている可能性も意味します。専門家のサポートや
+                        自分に合った環境を整えることで、より快適に過ごすことができるでしょう。
+                    </p>
+                `;
+            }
+
+            assessmentResult.innerHTML = resultText;
+        }
+
+        // 診断結果を計算してレーダーチャートを更新
+        function calculateResults() {
+            const totalScore = values.reduce((sum, value) => sum + value, 0);
+            const averageScore = (totalScore / (questions.length * 5)) * 100;
+
+            // レーダーチャートのデータを更新
+            radarChart.data.datasets[0].data = [averageScore];
+            radarChart.update();
+
+            // アセスメント結果を表示
+            displayAssessmentResult(averageScore);
+        }
+
+        // 初期レーダーチャートを表示
+        calculateResults();
+    </script>
+</body>
+</html>

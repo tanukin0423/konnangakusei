@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADHDサポートサイト</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .slider-container p {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .slider-container input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+            accent-color: #3498db;
+        }
+        .slider-container span {
+            width: 20px;
+            text-align: center;
+        }
+        .chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .advice-content, .guide-content {
+            line-height: 1.8;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section h2 {
+            color: #e67e22;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        .section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .section ul li {
+            margin: 10px 0;
+        }
+        .result-container {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>ADHDサポートサイト</h1>
+
+    <!-- 診断ツール -->
+    <div class="section">
+        <h2>ADHD診断</h2>
+        <div id="questions" class="question-container"></div>
+        <div class="button-container">
+            <button onclick="calculateResults()">診断する</button>
+        </div>
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div id="result" class="result-container"></div>
+    </div>
+
+    <!-- アドバイスとリソース -->
+    <div class="section">
+        <h2>アドバイスとリソース</h2>
+        <div class="advice-content">
+            <h3>ADHDの特性を活かすためのアドバイス</h3>
+            <ul>
+                <li><strong>タスクを小さく分割する</strong>: 大きなタスクを小さなステップに分け、一つずつ取り組むことで集中力を維持しましょう。</li>
+                <li><strong>タイマーを使う</strong>: ポモドーロテクニックなど、タイマーを使って短時間集中と休憩を繰り返す方法を試してみましょう。</li>
+                <li><strong>環境を整える</strong>: 集中しやすい環境を作るために、机の上を整理し、気が散るものを遠ざけましょう。</li>
+                <li><strong>リマインダーを設定する</strong>: スマートフォンやカレンダーにリマインダーを設定し、忘れっぽさをカバーしましょう。</li>
+                <li><strong>運動を取り入れる</strong>: 適度な運動は集中力や気分を向上させる効果があります。毎日少しずつ体を動かしましょう。</li>
+                <li><strong>自己受容</strong>: ADHDの特性を受け入れ、自分に合った方法で生活することを目指しましょう。</li>
+                <li><strong>専門家の助けを借りる</strong>: ADHDの症状が生活に支障をきたす場合は、専門家に相談することも検討しましょう。</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 専門家向けリソース -->
+    <div class="section">
+        <h2>専門家向けリソース</h2>
+        <div class="guide-content">
+            <h3>カウンセラーや教師向けの支援方法</h3>
+            <ul>
+                <li><strong>構造化された環境を提供する</strong>: 明確なルールやスケジュールを提示し、ADHDの学生が安心して過ごせる環境を作りましょう。</li>
+                <li><strong>ポジティブなフィードバック</strong>: 小さな成功でも褒めることで、自信を持たせましょう。</li>
+                <li><strong>視覚的な手がかりを使う</strong>: カラフルな付箋や図を使って、タスクやスケジュールを視覚化しましょう。</li>
+                <li><strong>短い指示を与える</strong>: 長い説明ではなく、短く明確な指示を心がけましょう。</li>
+                <li><strong>休憩を促す</strong>: 集中力が切れたら、短い休憩を取るように促しましょう。</li>
+                <li><strong>専門家との連携</strong>: 必要に応じて、精神科医や臨床心理士と連携し、適切な支援を提供しましょう。</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "物事に集中し続けることが難しいと感じますか？",
+            "忘れっぽく、よく物をなくしますか？",
+            "長時間じっとしていることが苦手ですか？",
+            "順序立てて物事を進めるのが難しいですか？",
+            "気が散りやすく、一つのことに集中できないことが多いですか？",
+            "締め切りに間に合わないことがよくありますか？",
+            "衝動的に行動してしまうことがありますか？",
+            "計画を立てるのが苦手ですか？",
+            "優先順位をつけるのが難しいですか？",
+            "長時間の作業に飽きてしまうことが多いですか？",
+            "他人の話を聞いている途中で、別のことを考えてしまうことがありますか？",
+            "細かいミスをすることが多いですか？",
+            "時間管理が苦手ですか？",
+            "一度に複数のタスクをこなすのが難しいですか？",
+            "新しいことを始めるのが好きですが、すぐに飽きてしまいますか？",
+            "整理整頓が苦手ですか？",
+            "やるべきことを先延ばしにしがちですか？",
+            "会話中に話が脱線しやすいですか？",
+            "落ち着きがないと指摘されることがありますか？",
+            "自分のペースで物事を進めるのが好きですか？"
+        ];
+
+        let currentScores = {};
+
+        function loadQuestions() {
+            const container = document.getElementById("questions");
+            questions.forEach((q, index) => {
+                container.innerHTML += `
+                    <div class="slider-container">
+                        <p>${q}</p>
+                        <input type="range" min="0" max="5" value="3" 
+                               oninput="this.nextElementSibling.textContent = this.value">
+                        <span>3</span>
+                    </div>`;
+            });
+        }
+
+        function calculateResults() {
+            let totalScore = 0;
+            document.querySelectorAll("#questions input[type='range']").forEach(input => {
+                totalScore += parseInt(input.value);
+            });
+
+            const averageScore = (totalScore / (questions.length * 5)) * 100;
+            currentScores = { "ADHD傾向": averageScore };
+            showRadarChart(currentScores);
+            showResult(averageScore);
+        }
+
+        function showRadarChart(scores) {
+            const ctx = document.getElementById("radarChart").getContext("2d");
+            const chartData = {
+                labels: Object.keys(scores),
+                datasets: [{
+                    label: '診断結果',
+                    data: Object.values(scores),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            };
+
+            const chartOptions = {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        stepSize: 20,
+                        callback: function (value) { return value + "%" }
+                    },
+                    pointLabels: {
+                        fontSize: 12
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            };
+
+            if (window.myRadarChart) {
+                window.myRadarChart.destroy();
+            }
+
+            window.myRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: chartData,
+                options: chartOptions
+            });
+        }
+
+        function showResult(score) {
+            const resultContainer = document.getElementById("result");
+            let resultText = "";
+            if (score >= 80) {
+                resultText = `<h3>結果: ADHD傾向が強い</h3>
+                               <p>あなたはADHDの傾向が強いようです。生活に支障を感じる場合は、専門家に相談することをお勧めします。</p>`;
+            } else if (score >= 50) {
+                resultText = `<h3>結果: ADHD傾向が中程度</h3>
+                               <p>あなたにはADHDの傾向が見られます。日常生活で困ることがあれば、専門家に相談することを検討しましょう。</p>`;
+            } else {
+                resultText = `<h3>結果: ADHD傾向が低い</h3>
+                               <p>あなたのADHD傾向は低いようです。ただし、気になることがあれば専門家に相談することも検討しましょう。</p>`;
+            }
+            resultContainer.innerHTML = resultText;
+        }
+
+        loadQuestions();
+    </script>
+</body>
+</html>
